@@ -74,6 +74,8 @@
   .candidato .dados strong{font-size:1.05rem;display:block}
   .candidato .dados span{color:var(--texto-suave);font-size:.92rem}
   .candidato .num{margin-left:auto;background:var(--azul);color:var(--amarelo);font-weight:800;padding:3px 10px;border-radius:8px;font-size:1rem;letter-spacing:1px;flex:0 0 auto}
+  .link-entrevista{display:inline-block;margin-top:3px;font-size:.85rem;color:#c4302b;font-weight:700;text-decoration:none}
+  .link-entrevista:hover{text-decoration:underline}
   .a-definir{color:var(--texto-suave);font-style:italic;padding:6px 0}
 
   footer{text-align:center;color:var(--texto-suave);font-size:.85rem;padding:26px 16px;border-top:1px solid var(--borda);margin-top:40px}
@@ -157,6 +159,8 @@
    - "governador" e os itens das listas têm: nome, partido, numero e foto
      (a foto é opcional: pode ser uma URL ou o nome de um arquivo de imagem;
       deixe "" para mostrar as iniciais do candidato).
+   - Campo opcional "entrevista": URL de um vídeo (ex.: do YouTube). Quando
+     presente, aparece o link "Veja minha entrevista" no cartão do candidato.
    - "senador", "depFederal" e "depEstadual" são LISTAS: você pode indicar
      mais de um candidato — basta acrescentar itens entre { } separados
      por vírgula. Em 2026 são eleitas 2 vagas de senador por estado.
@@ -204,7 +208,7 @@ const DADOS_ESTADOS = {
   },
   /* ===== Bahia (BA) ===== */
   ba: {
-    governador:  { nome: "ACM Neto", partido: "União Brasil — registro no TSE em processamento", numero: "", foto: "" },
+    governador:  { nome: "ACM Neto", partido: "União Brasil", numero: "44", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002533190/BA" },
     senador:     [
       { nome: "João Roma", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002533123/BA" },
       { nome: "Angelo Coronel", partido: "Republicanos", numero: "100", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002533124/BA" }
@@ -226,8 +230,8 @@ const DADOS_ESTADOS = {
   df: {
     governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
     senador:     [
-      { nome: "Michelle Bolsonaro", partido: "PL — registro no TSE em processamento", numero: "", foto: "" },
-      { nome: "Bia Kicis", partido: "PL — registro no TSE em processamento", numero: "", foto: "" }
+      { nome: "Michelle Bolsonaro", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002552936/DF" },
+      { nome: "Bia Kicis", partido: "PL", numero: "223", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002552934/DF" }
     ],
     depFederal:  [],
     depEstadual: []
@@ -236,8 +240,8 @@ const DADOS_ESTADOS = {
   es: {
     governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
     senador:     [
-      { nome: "Maguinha Malta", partido: "PL — registro no TSE em processamento", numero: "", foto: "" },
-      { nome: "Evair de Melo", partido: "Republicanos — registro no TSE em processamento", numero: "", foto: "" }
+      { nome: "Maguinha Malta", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002553269/ES" },
+      { nome: "Evair de Melo", partido: "Republicanos", numero: "100", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002553265/ES" }
     ],
     depFederal:  [],
     depEstadual: []
@@ -246,8 +250,8 @@ const DADOS_ESTADOS = {
   go: {
     governador:  { nome: "Wilder Morais", partido: "PL", numero: "22", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002551791/GO" },
     senador:     [
-      { nome: "Gustavo Gayer", partido: "PL — registro no TSE em processamento", numero: "", foto: "" },
-      { nome: "Oséias Varão", partido: "PL — registro no TSE em processamento", numero: "", foto: "" }
+      { nome: "Gustavo Gayer", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002543556/GO" },
+      { nome: "Oséias Varão", partido: "PL", numero: "227", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002543560/GO" }
     ],
     depFederal:  [],
     depEstadual: []
@@ -265,7 +269,7 @@ const DADOS_ESTADOS = {
   mt: {
     governador:  { nome: "Wellington Fagundes", partido: "PL", numero: "22", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002551737/MT" },
     senador:     [
-      { nome: "José Medeiros", partido: "PL — registro no TSE em processamento", numero: "", foto: "" }
+      { nome: "Zé Medeiros", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002552693/MT" }
     ],
     depFederal:  [],
     depEstadual: []
@@ -284,9 +288,11 @@ const DADOS_ESTADOS = {
   mg: {
     governador:  { nome: "Flávio Roscoe", partido: "PL", numero: "22", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002550834/MG" },
     senador:     [
-      { nome: "Domingos Sávio", partido: "PL — registro no TSE em processamento", numero: "", foto: "" }
+      { nome: "Domingos Sávio", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002551786/MG" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Altivo Duarte", partido: "Novo", numero: "3037", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534464/MG", entrevista: "https://youtube.com/live/e62fkt8aTxg" }
+    ],
     depEstadual: []
   },
   /* ===== Pará (PA) ===== */
@@ -315,7 +321,9 @@ const DADOS_ESTADOS = {
       { nome: "Deltan Dallagnol", partido: "Novo", numero: "300", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002547661/PR" },
       { nome: "Filipe Barros", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002547660/PR" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Guilherme Livoti", partido: "Novo", numero: "3043", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002542303/PR", entrevista: "https://youtube.com/live/judnrEci8w8" }
+    ],
     depEstadual: []
   },
   /* ===== Pernambuco (PE) ===== */
@@ -363,12 +371,16 @@ const DADOS_ESTADOS = {
       { nome: "Sanderson", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/210002547816/RS" },
       { nome: "Marcel van Hattem", partido: "Novo", numero: "300", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/210002547819/RS" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Jessé Sangalli", partido: "PL", numero: "2230", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/210002534664/RS", entrevista: "https://youtube.com/live/KgjBdP3tbEU" }
+    ],
+    depEstadual: [
+      { nome: "Alexis Grego", partido: "Podemos", numero: "20010", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/210002534326/RS" }
+    ]
   },
   /* ===== Rondônia (RO) ===== */
   ro: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Marcos Rogério", partido: "PL", numero: "22", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002541939/RO" },
     senador:     [
       { nome: "Dr. Fernando Máximo", partido: "PL", numero: "221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002539996/RO" },
       { nome: "Bruno Bolsonaro Scheid", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002539995/RO" }
@@ -403,7 +415,9 @@ const DADOS_ESTADOS = {
       { nome: "André do Prado", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002541308/SP" },
       { nome: "Guilherme Derrite", partido: "PP", numero: "111", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002541312/SP" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Marina Helena", partido: "Novo", numero: "3007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530115/SP", entrevista: "https://youtube.com/live/KOqFoIECMEQ" }
+    ],
     depEstadual: []
   },
   /* ===== Sergipe (SE) ===== */
@@ -492,8 +506,11 @@ function htmlCandidato(c){
   const foto = c.foto
     ? '<img class="foto" src="'+c.foto+'" alt="Foto de '+c.nome+'" onerror="this.classList.add(\'sem-foto\');this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'foto sem-foto\',textContent:\''+iniciais+'\'}))">'
     : '<div class="foto sem-foto">'+iniciais+'</div>';
+  const entrevista = c.entrevista
+    ? '<br><a class="link-entrevista" href="'+c.entrevista+'" target="_blank" rel="noopener">&#9654; Veja minha entrevista</a>'
+    : '';
   return '<div class="candidato">'+foto+
-    '<div class="dados"><strong>'+c.nome+'</strong><span>'+(c.partido||'')+'</span></div>'+
+    '<div class="dados"><strong>'+c.nome+'</strong><span>'+(c.partido||'')+'</span>'+entrevista+'</div>'+
     (c.numero ? '<span class="num">'+c.numero+'</span>' : '')+
     '</div>';
 }
