@@ -76,6 +76,7 @@
   .candidato .num{margin-left:auto;background:var(--azul);color:var(--amarelo);font-weight:800;padding:3px 10px;border-radius:8px;font-size:1rem;letter-spacing:1px;flex:0 0 auto}
   .link-entrevista{display:inline-block;margin-top:3px;font-size:.85rem;color:#c4302b;font-weight:700;text-decoration:none}
   .link-entrevista:hover{text-decoration:underline}
+  .candidato .dados .obs{display:inline-block;margin-left:8px;background:#fff3cd;color:#8a6d1a;border:1px solid #e6d28a;font-size:.72rem;font-weight:700;padding:1px 8px;border-radius:999px;vertical-align:middle;font-style:normal}
   .a-definir{color:var(--texto-suave);font-style:italic;padding:6px 0}
 
   footer{text-align:center;color:var(--texto-suave);font-size:.85rem;padding:26px 16px;border-top:1px solid var(--borda);margin-top:40px}
@@ -159,6 +160,8 @@
    - "governador" e os itens das listas têm: nome, partido, numero e foto
      (a foto é opcional: pode ser uma URL ou o nome de um arquivo de imagem;
       deixe "" para mostrar as iniciais do candidato).
+   - Campo opcional "obs": um aviso curto exibido ao lado do partido,
+     por exemplo "por exclusão".
    - Campo opcional "entrevista": URL de um vídeo (ex.: do YouTube). Quando
      presente, aparece o link "Veja minha entrevista" no cartão do candidato.
    - "senador", "depFederal" e "depEstadual" são LISTAS: você pode indicar
@@ -179,7 +182,7 @@ const DADOS_ESTADOS = {
   },
   /* ===== Alagoas (AL) ===== */
   al: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "JHC", partido: "PSDB", numero: "45", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002553350/AL" },
     senador:     [
       { nome: "Marina JHC", partido: "PSDB", numero: "456", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002553711/AL" },
       { nome: "Arthur Lira", partido: "PP", numero: "111", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002553272/AL" }
@@ -218,7 +221,7 @@ const DADOS_ESTADOS = {
   },
   /* ===== Ceará (CE) ===== */
   ce: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Ciro Gomes", partido: "PSDB", numero: "45", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002531351/CE" },
     senador:     [
       { nome: "Alcides Fernandes", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002540754/CE" },
       { nome: "Capitão Wagner", partido: "União Brasil", numero: "445", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002540753/CE" }
@@ -228,17 +231,21 @@ const DADOS_ESTADOS = {
   },
   /* ===== Distrito Federal (DF) ===== */
   df: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Celina Leão", partido: "PP", numero: "11", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002553055/DF" },
     senador:     [
       { nome: "Michelle Bolsonaro", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002552936/DF" },
       { nome: "Bia Kicis", partido: "PL", numero: "223", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002552934/DF" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Mariana Naime", partido: "PL", numero: "2201", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550931/DF" }
+    ],
+    depEstadual: [
+      { nome: "Luíza do Clezão", partido: "PL", numero: "22822", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550006/DF" }
+    ]
   },
   /* ===== Espírito Santo (ES) ===== */
   es: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Lorenzo Pazolini", partido: "Republicanos", numero: "10", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002552682/ES" },
     senador:     [
       { nome: "Maguinha Malta", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002553269/ES" },
       { nome: "Evair de Melo", partido: "Republicanos", numero: "100", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002553265/ES" }
@@ -258,7 +265,7 @@ const DADOS_ESTADOS = {
   },
   /* ===== Maranhão (MA) ===== */
   ma: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Eduardo Braide", partido: "PSD", numero: "55", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002545679/MA", obs: "por exclusão" },
     senador:     [
       { nome: "Cidônio Gonçalves", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002537364/MA" }
     ],
@@ -276,12 +283,14 @@ const DADOS_ESTADOS = {
   },
   /* ===== Mato Grosso do Sul (MS) ===== */
   ms: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Eduardo Riedel", partido: "PP", numero: "11", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/120002536582/MS" },
     senador:     [
       { nome: "Reinaldo Azambuja", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/120002535764/MS" },
       { nome: "Capitão Contar", partido: "PL", numero: "221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/120002535769/MS" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Marcos Pollon", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/120002536282/MS" }
+    ],
     depEstadual: []
   },
   /* ===== Minas Gerais (MG) ===== */
@@ -328,7 +337,7 @@ const DADOS_ESTADOS = {
   },
   /* ===== Pernambuco (PE) ===== */
   pe: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Raquel Lyra", partido: "PSD", numero: "55", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/170002537227/PE", obs: "por exclusão" },
     senador:     [
       { nome: "Mendonça Filho", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/170002539456/PE" }
     ],
@@ -337,7 +346,7 @@ const DADOS_ESTADOS = {
   },
   /* ===== Piauí (PI) ===== */
   pi: {
-    governador:  null, // ex.: { nome: "Nome do Candidato", partido: "Partido XX", numero: "00", foto: "" }
+    governador:  { nome: "Elizeu Aguiar", partido: "Novo", numero: "30", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/180002533958/PI" },
     senador:     [
       { nome: "Tiago Junqueira", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/180002540449/PI" }
     ],
@@ -351,8 +360,14 @@ const DADOS_ESTADOS = {
       { nome: "Carlos Portinho", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002535142/RJ" },
       { nome: "Carlos Jordy", partido: "PL", numero: "221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002542888/RJ" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Sóstenes Cavalcante", partido: "PL", numero: "2277", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002532795/RJ" },
+      { nome: "Rebeca Ramagem", partido: "PL", numero: "2217", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002532796/RJ" },
+      { nome: "Luiz Lima", partido: "Novo", numero: "3030", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002534633/RJ" }
+    ],
+    depEstadual: [
+      { nome: "Alexandre Freitas", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002534734/RJ" }
+    ]
   },
   /* ===== Rio Grande do Norte (RN) ===== */
   rn: {
@@ -405,7 +420,11 @@ const DADOS_ESTADOS = {
       { nome: "Carlos Bolsonaro", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002541935/SC" },
       { nome: "Carol de Toni", partido: "PL", numero: "221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002541931/SC" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Gilson Marques", partido: "Novo", numero: "3050", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002535434/SC" },
+      { nome: "Jair Bolsonaro", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539371/SC" },
+      { nome: "Julia Zanatta", partido: "PL", numero: "2233", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539378/SC" }
+    ],
     depEstadual: []
   },
   /* ===== São Paulo (SP) ===== */
@@ -416,9 +435,16 @@ const DADOS_ESTADOS = {
       { nome: "Guilherme Derrite", partido: "PP", numero: "111", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002541312/SP" }
     ],
     depFederal:  [
-      { nome: "Marina Helena", partido: "Novo", numero: "3007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530115/SP", entrevista: "https://youtube.com/live/KOqFoIECMEQ" }
+      { nome: "Marina Helena", partido: "Novo", numero: "3007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530115/SP", entrevista: "https://youtube.com/live/KOqFoIECMEQ" },
+      { nome: "Delegado Paulo Bilynskyj", partido: "PL", numero: "2247", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002535991/SP" },
+      { nome: "Dra. Nise Yamaguchi", partido: "PL", numero: "2221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002535935/SP" },
+      { nome: "Lucas Pavanato", partido: "PL", numero: "2211", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002535995/SP" },
+      { nome: "Zoe Martínez", partido: "PL", numero: "2205", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002535999/SP" }
     ],
-    depEstadual: []
+    depEstadual: [
+      { nome: "Eng. Catharina Donato", partido: "Novo", numero: "30777", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530265/SP" },
+      { nome: "Paulo Kogos", partido: "PL", numero: "22038", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002536412/SP" }
+    ]
   },
   /* ===== Sergipe (SE) ===== */
   se: {
@@ -510,7 +536,7 @@ function htmlCandidato(c){
     ? '<br><a class="link-entrevista" href="'+c.entrevista+'" target="_blank" rel="noopener">&#9654; Veja minha entrevista</a>'
     : '';
   return '<div class="candidato">'+foto+
-    '<div class="dados"><strong>'+c.nome+'</strong><span>'+(c.partido||'')+'</span>'+entrevista+'</div>'+
+    '<div class="dados"><strong>'+c.nome+'</strong><span>'+(c.partido||'')+(c.obs?' <span class="obs">'+c.obs+'</span>':'')+'</span>'+entrevista+'</div>'+
     (c.numero ? '<span class="num">'+c.numero+'</span>' : '')+
     '</div>';
 }
@@ -535,7 +561,7 @@ function mostrarEstado(uf){
     htmlCargo('Governador', dados.governador) +
     htmlCargo('Senador', dados.senador) +
     htmlCargo('Deputado Federal', dados.depFederal) +
-    htmlCargo('Deputado Estadual', dados.depEstadual);
+    htmlCargo(uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual', dados.depEstadual);
   document.getElementById('pagina-principal').style.display = 'none';
   document.getElementById('pagina-estado').style.display = 'block';
   window.scrollTo({top:0});
