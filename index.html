@@ -7,6 +7,30 @@
 <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DZJ1KF4GL8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  /* send_page_view desligado: as visualizações são enviadas manualmente
+     pela função rota(), para que cada estado (#/sp, #/rs...) conte como
+     uma página própria no painel do Analytics. */
+  gtag('config', 'G-DZJ1KF4GL8', { send_page_view: false });
+</script>
+<!-- GoatCounter -->
+<script>
+  /* O primeiro acesso é contado automaticamente pelo count.js usando este
+     callback de caminho (que traduz #/sp em /sp); as navegações seguintes
+     entre estados são contadas manualmente pela função rota(). */
+  window.goatcounter = {
+    path: function(){
+      const m = location.hash.match(/^#\/([a-z]{2})$/i);
+      return m ? '/' + m[1].toLowerCase() : '/';
+    }
+  };
+</script>
+<script data-goatcounter="https://peterapoia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <style>
   :root{
     --verde:#00923F;
@@ -90,11 +114,13 @@
   .colinha-aviso{max-width:560px;margin:4px auto 0;background:#fff3cd;border:1px solid #e6d28a;color:#6b5310;border-radius:10px;padding:10px 14px;font-size:.88rem;font-weight:600}
   .botao-imprimir{display:inline-flex;align-items:center;gap:8px;background:var(--verde);color:#fff;border:none;font-size:.95rem;font-weight:700;padding:10px 22px;border-radius:999px;cursor:pointer;margin-top:12px}
   .botao-imprimir:hover{filter:brightness(1.08)}
+  .botao-ciclar{align-self:center;margin-left:10px;background:#fff;border:2px solid var(--azul);color:var(--azul);font-weight:700;font-size:.8rem;padding:5px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .botao-ciclar:hover{background:var(--azul);color:var(--amarelo)}
   @media print{
     body *{visibility:hidden}
     .cartao-colinha,.cartao-colinha *{visibility:visible}
     .cartao-colinha{position:absolute;top:0;left:0;right:0;box-shadow:none;border:none}
-    .botao-imprimir{display:none}
+    .botao-imprimir,.botao-ciclar{display:none}
   }
   .cartao-cargo{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(0,20,60,.06)}
   .cartao-cargo h4{color:#fff;background:var(--verde);display:inline-block;font-size:.82rem;text-transform:uppercase;letter-spacing:.8px;padding:4px 12px;border-radius:999px;margin-bottom:14px}
@@ -180,8 +206,20 @@
 <div class="dica-estado" id="dica-estado"></div>
 
 <footer>
-  Site de indicações pessoais de voto — Eleições 2026.
+  Site de indicações pessoais de voto — Eleições 2026.<span id="contador-visitas"></span>
 </footer>
+<script>
+  /* Contador público de visitas (total do site, via GoatCounter) */
+  fetch('https://peterapoia.goatcounter.com/counter/TOTAL.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      if(d && d.count){
+        const n = d.count.replace(/[\s  ]/g, '.');
+        document.getElementById('contador-visitas').textContent = ' · ' + n + ' visitas';
+      }
+    })
+    .catch(() => {}); /* se indisponível, simplesmente não mostra */
+</script>
 
 <script>
 /* ==========================================================================
@@ -272,7 +310,8 @@ const DADOS_ESTADOS = {
       { nome: "Mariana Naime", partido: "PL", numero: "2201", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550931/DF" }
     ],
     depEstadual: [
-      { nome: "Luíza do Clezão", partido: "PL", numero: "22822", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550006/DF" }
+      { nome: "Luíza do Clezão", partido: "PL", numero: "22822", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550006/DF" },
+      { nome: "Julia Lucy", partido: "PL", numero: "22190", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550015/DF" }
     ]
   },
   /* ===== Espírito Santo (ES) ===== */
@@ -346,10 +385,12 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Altivo Duarte", partido: "Novo", numero: "3037", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534464/MG", entrevista: "https://youtube.com/live/e62fkt8aTxg" },
-      { nome: "Nikolas Ferreira", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002542026/MG" }
+      { nome: "Nikolas Ferreira", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002542026/MG" },
+      { nome: "Warley Mól", partido: "Novo", numero: "3033", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534481/MG" }
     ],
     depEstadual: [
-      { nome: "Bruno Engler", partido: "PL", numero: "22222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002542113/MG" }
+      { nome: "Bruno Engler", partido: "PL", numero: "22222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002542113/MG" },
+      { nome: "Fernanda Pereira Altoé", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534574/MG" }
     ]
   },
   /* ===== Pará (PA) ===== */
@@ -453,7 +494,9 @@ const DADOS_ESTADOS = {
       { nome: "Dr. Fernando Máximo", partido: "PL", numero: "221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002539996/RO" },
       { nome: "Bruno Bolsonaro Scheid", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002539995/RO" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Coronel Chrisóstomo", partido: "PL", numero: "2210", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002536880/RO" }
+    ],
     depEstadual: []
   },
   /* ===== Roraima (RR) ===== */
@@ -608,29 +651,54 @@ function htmlCargo(titulo, candidatos, destaque){
 }
 
 /* Colinha: resumo dos números na ordem dos votos na urna */
+let colinhaUf = null;
+const colinhaIdx = { fed: 0, est: 0 };
+function colinhaCaixas(numero, qtd){
+  const d = (numero || '').split('');
+  let out = '';
+  for(let i = 0; i < Math.max(qtd, d.length); i++)
+    out += '<span class="colinha-caixa">'+(d[i] || '')+'</span>';
+  return out;
+}
+function colinhaConteudo(rotulo, cand, qtd, botao){
+  return '<div class="rotulo">'+rotulo+'</div>'+
+    '<div class="colinha-caixas">'+colinhaCaixas(cand && cand.numero, qtd)+(botao || '')+'</div>'+
+    (cand && cand.numero ? '<div class="colinha-nome">'+cand.nome+'</div>' : '');
+}
+/* Deputados podem ter mais de uma indicação: o botão ⟳ cicla entre elas
+   (só nesta visualização — nada fica gravado; a impressão sai com o escolhido). */
+function colinhaCargoCiclavel(tipo){
+  const dados = DADOS_ESTADOS[colinhaUf] || {};
+  const lista = (tipo === 'fed' ? dados.depFederal : dados.depEstadual) || [];
+  const rotulo = tipo === 'fed'
+    ? 'Deputada ou Deputado Federal'
+    : (colinhaUf === 'df' ? 'Deputada ou Deputado Distrital' : 'Deputada ou Deputado Estadual');
+  const botao = lista.length > 1
+    ? '<button class="botao-ciclar" onclick="colinhaCiclar(\''+tipo+'\')" title="Trocar candidato">&#8635; '+(colinhaIdx[tipo]+1)+'/'+lista.length+'</button>'
+    : '';
+  return colinhaConteudo(rotulo, lista[colinhaIdx[tipo]], tipo === 'fed' ? 4 : 5, botao);
+}
+function colinhaCiclar(tipo){
+  const dados = DADOS_ESTADOS[colinhaUf] || {};
+  const lista = (tipo === 'fed' ? dados.depFederal : dados.depEstadual) || [];
+  if(lista.length < 2) return;
+  colinhaIdx[tipo] = (colinhaIdx[tipo] + 1) % lista.length;
+  document.getElementById('colinha-cargo-' + tipo).innerHTML = colinhaCargoCiclavel(tipo);
+}
 function htmlColinha(uf, dados){
-  const caixas = (numero, qtd) => {
-    const d = (numero || '').split('');
-    let out = '';
-    for(let i = 0; i < Math.max(qtd, d.length); i++)
-      out += '<span class="colinha-caixa">'+(d[i] || '')+'</span>';
-    return out;
-  };
+  colinhaUf = uf;
+  colinhaIdx.fed = 0;
+  colinhaIdx.est = 0;
   const linha = (rotulo, cand, qtd) =>
-    '<div class="colinha-cargo"><div class="rotulo">'+rotulo+'</div>'+
-    '<div class="colinha-caixas">'+caixas(cand && cand.numero, qtd)+'</div>'+
-    (cand && cand.numero ? '<div class="colinha-nome">'+cand.nome+'</div>' : '')+
-    '</div>';
+    '<div class="colinha-cargo">'+colinhaConteudo(rotulo, cand, qtd)+'</div>';
   const sen = dados.senador || [];
-  const fed = (dados.depFederal || [])[0];
-  const est = (dados.depEstadual || [])[0];
   return '<div class="cartao-colinha">'+
     '<div class="colinha-topo"><h4>No dia 04/10, leve a cola!</h4>'+
     '<p>Meus números neste estado, na ordem dos votos na urna</p></div>'+
     '<div class="colinha-faixa"></div>'+
     '<div class="colinha-corpo">'+
-    linha('Deputada ou Deputado Federal', fed, 4)+
-    linha(uf === 'df' ? 'Deputada ou Deputado Distrital' : 'Deputada ou Deputado Estadual', est, 5)+
+    '<div class="colinha-cargo" id="colinha-cargo-fed">'+colinhaCargoCiclavel('fed')+'</div>'+
+    '<div class="colinha-cargo" id="colinha-cargo-est">'+colinhaCargoCiclavel('est')+'</div>'+
     linha('Senadora ou Senador (1ª vaga)', sen[0], 3)+
     linha('Senadora ou Senador (2ª vaga)', sen[1], 3)+
     linha('Governadora ou Governador', dados.governador, 2)+
@@ -669,9 +737,27 @@ function mostrarPrincipal(){
 /* Navegação por hash: #/sp abre São Paulo; #/ volta ao mapa */
 function rota(){
   const m = location.hash.match(/^#\/([a-z]{2})$/i);
-  if(m && NOMES_UF[m[1].toLowerCase()]) mostrarEstado(m[1].toLowerCase());
+  const uf = m && NOMES_UF[m[1].toLowerCase()] ? m[1].toLowerCase() : null;
+  if(uf) mostrarEstado(uf);
   else mostrarPrincipal();
+  /* registra a visualização no Google Analytics (uma página por estado) */
+  if(typeof gtag === 'function'){
+    gtag('event', 'page_view', {
+      page_path: uf ? '/' + uf : '/',
+      page_title: uf ? NOMES_UF[uf] : document.title,
+      page_location: location.href
+    });
+  }
+  /* registra também no GoatCounter (o 1º acesso é contado pelo count.js) */
+  if(!rota.inicial && window.goatcounter && window.goatcounter.count){
+    window.goatcounter.count({
+      path: uf ? '/' + uf : '/',
+      title: uf ? NOMES_UF[uf] : document.title
+    });
+  }
+  rota.inicial = false;
 }
+rota.inicial = true;
 window.addEventListener('hashchange', rota);
 rota();
 </script>
