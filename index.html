@@ -894,9 +894,12 @@ function mostrarEstado(uf){
   document.getElementById('grade-cargos').innerHTML =
     htmlCargo('Governador', dados.governador, true) +
     htmlCargo('Senador', dados.senador) +
-    htmlCargo('Deputado Federal', dados.depFederal, false, 'Deputado Federal') +
+    htmlCargo('Deputado Federal', dados.depFederal, false,
+              /* o botão de indicar some quando já há 3 ou mais indicações */
+              (dados.depFederal || []).length < 3 ? 'Deputado Federal' : null) +
     htmlCargo(uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual', dados.depEstadual, false,
-              uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual') +
+              (dados.depEstadual || []).length < 3
+                ? (uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual') : null) +
     htmlColinha(uf, dados);
   document.getElementById('pagina-principal').style.display = 'none';
   document.getElementById('pagina-estado').style.display = 'block';
