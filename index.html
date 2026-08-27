@@ -125,6 +125,8 @@
   .modal-indicacao h4{color:var(--azul);font-size:1.2rem}
   #indicacao-contexto{color:var(--texto-suave);font-size:.9rem;margin:4px 0 8px}
   .modal-indicacao label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
+  .modal-indicacao small{display:block;font-weight:400;color:var(--texto-suave);font-size:.78rem;margin-top:3px;line-height:1.4}
+  #contador-mensagem{font-weight:700;color:var(--azul)}
   .modal-indicacao input,.modal-indicacao textarea{width:100%;padding:8px 10px;border:1px solid var(--borda);border-radius:8px;font:inherit;margin-top:4px;background:#fff;color:var(--texto)}
   .modal-botoes{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
   .botao-cancelar{background:#eef1f6;border:none;padding:9px 18px;border-radius:999px;font-weight:600;cursor:pointer;color:var(--texto)}
@@ -227,20 +229,25 @@
     <h4>Indicar um candidato libertário</h4>
     <p id="indicacao-contexto"></p>
     <form id="form-indicacao" onsubmit="return enviarIndicacao(event)">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label>Nome do candidato *
         <input name="nome" required maxlength="80" placeholder="Nome de urna">
       </label>
-      <label>Número na urna
-        <input name="numero" maxlength="5" inputmode="numeric" pattern="[0-9]*" placeholder="Ex.: 3099">
+      <label>Número na urna *
+        <input name="numero" required maxlength="5" inputmode="numeric" pattern="[0-9]{4,5}" placeholder="Ex.: 3099" title="4 dígitos para federal, 5 para estadual/distrital">
       </label>
-      <label>Partido
-        <input name="partido" maxlength="30" placeholder="Ex.: Novo, PL...">
+      <label>Partido *
+        <input name="partido" required maxlength="30" placeholder="Ex.: Novo, PL...">
       </label>
-      <label>Seu nome ou contato (opcional)
-        <input name="contato" maxlength="100" placeholder="Para eu poder te responder">
+      <label>Seu e-mail *
+        <input name="email" type="email" required maxlength="100" placeholder="voce@exemplo.com">
+        <small>Informe um e-mail válido: é por ele que eu entro em contato sobre a sua indicação.</small>
       </label>
-      <label>Por que você indica? (opcional)
-        <textarea name="mensagem" rows="3" maxlength="500"></textarea>
+      <label>Por que você indica? *
+        <textarea name="mensagem" rows="5" required minlength="200" maxlength="1000"
+          placeholder="Explique a ligação do candidato com as pautas libertárias..."
+          oninput="document.getElementById('contador-mensagem').textContent=this.value.length+'/200 caracteres (mínimo)'"></textarea>
+        <small>Descreva a ligação do candidato com as pautas libertárias — liberdade de expressão, liberdade para posse e porte de armas, redução do tamanho do Estado, defesa dos direitos individuais etc. <strong>Mínimo de 200 caracteres.</strong> <span id="contador-mensagem">0/200 caracteres (mínimo)</span></small>
       </label>
       <div class="modal-botoes">
         <button type="button" class="botao-cancelar" onclick="fecharIndicacao()">Cancelar</button>
@@ -799,24 +806,30 @@ function fecharIndicacao(){
 }
 function mailtoIndicacao(d){
   const corpo = 'Estado: '+d.estado+'\nCargo: '+d.cargo+'\nCandidato: '+d.nome+
-    '\nNúmero: '+d.numero+'\nPartido: '+d.partido+'\nContato: '+d.contato+'\nMensagem: '+d.mensagem;
+    '\nNúmero: '+d.numero+'\nPartido: '+d.partido+'\nE-mail: '+d.email+'\nMensagem: '+d.mensagem;
   return 'mailto:'+EMAIL_INDICACOES+'?subject='+encodeURIComponent(d._subject)+'&body='+encodeURIComponent(corpo);
 }
 async function enviarIndicacao(e){
   e.preventDefault();
   const f = e.target;
+  const st = document.getElementById('modal-status');
+  /* validação extra: 200 caracteres reais, descontando espaços nas pontas */
+  if(f.mensagem.value.trim().length < 200){
+    st.textContent = 'A justificativa precisa ter pelo menos 200 caracteres.';
+    return false;
+  }
   const estado = NOMES_UF[colinhaUf] || '';
   const dados = {
     _subject: '[Peter Apoia] Indicação: '+indicacaoCargo+' — '+estado,
+    _honey: f._honey.value,
     estado: estado,
     cargo: indicacaoCargo,
     nome: f.nome.value,
     numero: f.numero.value,
     partido: f.partido.value,
-    contato: f.contato.value,
+    email: f.email.value,
     mensagem: f.mensagem.value
   };
-  const st = document.getElementById('modal-status');
   const btn = document.getElementById('botao-enviar');
   btn.disabled = true;
   st.textContent = 'Enviando...';
