@@ -116,6 +116,22 @@
   .botao-imprimir:hover{filter:brightness(1.08)}
   .botao-ciclar{align-self:center;margin-left:10px;background:#fff;border:2px solid var(--azul);color:var(--azul);font-weight:700;font-size:.8rem;padding:5px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
   .botao-ciclar:hover{background:var(--azul);color:var(--amarelo)}
+
+  /* ===== Indicação de candidatos ===== */
+  .botao-indicar{display:block;width:100%;margin-top:14px;background:none;border:2px dashed var(--verde);color:var(--verde);font-weight:700;font-size:.85rem;padding:9px 14px;border-radius:10px;cursor:pointer}
+  .botao-indicar:hover{background:var(--verde);color:#fff}
+  .fundo-modal{display:none;position:fixed;inset:0;background:rgba(0,20,60,.55);z-index:100;align-items:center;justify-content:center;padding:16px}
+  .modal-indicacao{background:#fff;border-radius:14px;max-width:440px;width:100%;padding:22px;max-height:90vh;overflow:auto}
+  .modal-indicacao h4{color:var(--azul);font-size:1.2rem}
+  #indicacao-contexto{color:var(--texto-suave);font-size:.9rem;margin:4px 0 8px}
+  .modal-indicacao label{display:block;font-size:.85rem;font-weight:600;margin-top:10px}
+  .modal-indicacao input,.modal-indicacao textarea{width:100%;padding:8px 10px;border:1px solid var(--borda);border-radius:8px;font:inherit;margin-top:4px;background:#fff;color:var(--texto)}
+  .modal-botoes{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+  .botao-cancelar{background:#eef1f6;border:none;padding:9px 18px;border-radius:999px;font-weight:600;cursor:pointer;color:var(--texto)}
+  .botao-enviar{background:var(--verde);color:#fff;border:none;padding:9px 18px;border-radius:999px;font-weight:700;cursor:pointer}
+  .botao-enviar:disabled{opacity:.6;cursor:wait}
+  .modal-status{font-size:.85rem;margin-top:10px;text-align:right}
+  .modal-status a{color:var(--azul);font-weight:600}
   @media print{
     body *{visibility:hidden}
     .cartao-colinha,.cartao-colinha *{visibility:visible}
@@ -204,6 +220,36 @@
 </main>
 
 <div class="dica-estado" id="dica-estado"></div>
+
+<!-- Modal: indicação de candidato pelos visitantes -->
+<div class="fundo-modal" id="fundo-modal" onclick="if(event.target===this)fecharIndicacao()">
+  <div class="modal-indicacao">
+    <h4>Indicar um candidato libertário</h4>
+    <p id="indicacao-contexto"></p>
+    <form id="form-indicacao" onsubmit="return enviarIndicacao(event)">
+      <label>Nome do candidato *
+        <input name="nome" required maxlength="80" placeholder="Nome de urna">
+      </label>
+      <label>Número na urna
+        <input name="numero" maxlength="5" inputmode="numeric" pattern="[0-9]*" placeholder="Ex.: 3099">
+      </label>
+      <label>Partido
+        <input name="partido" maxlength="30" placeholder="Ex.: Novo, PL...">
+      </label>
+      <label>Seu nome ou contato (opcional)
+        <input name="contato" maxlength="100" placeholder="Para eu poder te responder">
+      </label>
+      <label>Por que você indica? (opcional)
+        <textarea name="mensagem" rows="3" maxlength="500"></textarea>
+      </label>
+      <div class="modal-botoes">
+        <button type="button" class="botao-cancelar" onclick="fecharIndicacao()">Cancelar</button>
+        <button type="submit" class="botao-enviar" id="botao-enviar">Enviar indicação</button>
+      </div>
+      <p class="modal-status" id="modal-status"></p>
+    </form>
+  </div>
+</div>
 
 <footer>
   Site de indicações pessoais de voto — Eleições 2026.<span id="contador-visitas"></span>
@@ -655,13 +701,16 @@ function htmlCandidato(c){
     '</div>';
 }
 
-function htmlCargo(titulo, candidatos, destaque){
+function htmlCargo(titulo, candidatos, destaque, indicacao){
   let corpo;
   if(!candidatos || (Array.isArray(candidatos) && candidatos.length===0)){
     corpo = '<p class="a-definir">A definir — em breve.</p>';
   } else {
     const lista = Array.isArray(candidatos) ? candidatos : [candidatos];
     corpo = lista.map(htmlCandidato).join('');
+  }
+  if(indicacao){
+    corpo += '<button class="botao-indicar" onclick="abrirIndicacao(\''+indicacao+'\')">&#10133; Quero indicar um candidato libertário aqui</button>';
   }
   return '<div class="cartao-cargo'+(destaque ? ' destaque' : '')+'"><h4>'+titulo+'</h4>'+corpo+'</div>';
 }
@@ -729,6 +778,63 @@ function htmlColinha(uf, dados){
     '</div>';
 }
 
+/* ===== Indicação de candidatos pelos visitantes =====
+   O formulário NÃO altera o site: a indicação é enviada por e-mail
+   (via formsubmit.co) para o autor avaliar e incluir manualmente. */
+const EMAIL_INDICACOES = 'pturguniev@gmail.com';
+let indicacaoCargo = '';
+function abrirIndicacao(cargo){
+  indicacaoCargo = cargo;
+  const estado = NOMES_UF[colinhaUf] || '';
+  document.getElementById('indicacao-contexto').textContent =
+    cargo + ' — ' + estado + '. A indicação é enviada para o Peter avaliar; ela não entra no site automaticamente.';
+  document.getElementById('modal-status').textContent = '';
+  document.getElementById('fundo-modal').style.display = 'flex';
+}
+function fecharIndicacao(){
+  document.getElementById('fundo-modal').style.display = 'none';
+}
+function mailtoIndicacao(d){
+  const corpo = 'Estado: '+d.estado+'\nCargo: '+d.cargo+'\nCandidato: '+d.nome+
+    '\nNúmero: '+d.numero+'\nPartido: '+d.partido+'\nContato: '+d.contato+'\nMensagem: '+d.mensagem;
+  return 'mailto:'+EMAIL_INDICACOES+'?subject='+encodeURIComponent(d._subject)+'&body='+encodeURIComponent(corpo);
+}
+async function enviarIndicacao(e){
+  e.preventDefault();
+  const f = e.target;
+  const estado = NOMES_UF[colinhaUf] || '';
+  const dados = {
+    _subject: '[Peter Apoia] Indicação: '+indicacaoCargo+' — '+estado,
+    estado: estado,
+    cargo: indicacaoCargo,
+    nome: f.nome.value,
+    numero: f.numero.value,
+    partido: f.partido.value,
+    contato: f.contato.value,
+    mensagem: f.mensagem.value
+  };
+  const st = document.getElementById('modal-status');
+  const btn = document.getElementById('botao-enviar');
+  btn.disabled = true;
+  st.textContent = 'Enviando...';
+  try{
+    const r = await fetch('https://formsubmit.co/ajax/'+EMAIL_INDICACOES, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+    if(!r.ok) throw new Error('http '+r.status);
+    st.textContent = '✅ Indicação enviada. Obrigado!';
+    f.reset();
+    setTimeout(fecharIndicacao, 2500);
+  }catch(err){
+    st.innerHTML = 'Não foi possível enviar automaticamente. '+
+      '<a href="'+mailtoIndicacao(dados)+'">Clique aqui para enviar por e-mail</a>.';
+  }
+  btn.disabled = false;
+  return false;
+}
+
 /* Mostra a página de um estado */
 function mostrarEstado(uf){
   const dados = DADOS_ESTADOS[uf] || {};
@@ -737,8 +843,9 @@ function mostrarEstado(uf){
   document.getElementById('grade-cargos').innerHTML =
     htmlCargo('Governador', dados.governador, true) +
     htmlCargo('Senador', dados.senador) +
-    htmlCargo('Deputado Federal', dados.depFederal) +
-    htmlCargo(uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual', dados.depEstadual) +
+    htmlCargo('Deputado Federal', dados.depFederal, false, 'Deputado Federal') +
+    htmlCargo(uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual', dados.depEstadual, false,
+              uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual') +
     htmlColinha(uf, dados);
   document.getElementById('pagina-principal').style.display = 'none';
   document.getElementById('pagina-estado').style.display = 'block';
