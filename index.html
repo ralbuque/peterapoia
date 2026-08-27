@@ -80,6 +80,10 @@
   svg#mapa-brasil path{fill:#8fd0a8;stroke:#ffffff;stroke-width:1.2;cursor:pointer;transition:fill .15s ease,transform .15s ease}
   svg#mapa-brasil path:hover,svg#mapa-brasil path:focus{fill:var(--amarelo);outline:none}
   .dica-estado{position:fixed;pointer-events:none;background:var(--azul-escuro);color:#fff;padding:5px 12px;border-radius:8px;font-size:.9rem;font-weight:600;transform:translate(-50%,-140%);opacity:0;transition:opacity .1s;z-index:50;white-space:nowrap}
+  .lista-estados{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px;margin-top:18px;text-align:left}
+  .pill-estado{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--borda);border-radius:999px;padding:8px 12px;text-decoration:none;color:var(--texto);font-size:.88rem;font-weight:600}
+  .pill-estado b{background:var(--azul);color:var(--amarelo);border-radius:6px;padding:1px 7px;font-size:.76rem;flex:0 0 auto}
+  .pill-estado:hover{border-color:var(--verde);background:#eef8f1}
 
   /* ===== Página do estado ===== */
   .pagina-estado{display:none}
@@ -207,6 +211,8 @@
       <div class="mapa-wrap">
         <svg id="mapa-brasil" viewBox="0 0 613 639" role="img" aria-label="Mapa do Brasil com estados clicáveis"></svg>
       </div>
+      <!-- Lista de estados para quem prefere (ou para telas pequenas) -->
+      <nav class="lista-estados" id="lista-estados" aria-label="Lista de estados"></nav>
     </div>
   </section>
 
@@ -341,7 +347,10 @@ const DADOS_ESTADOS = {
       { nome: "João Roma", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002533123/BA" },
       { nome: "Angelo Coronel", partido: "Republicanos", numero: "100", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002533124/BA" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Leandro de Jesus", partido: "PL", numero: "2233", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002532902/BA" },
+      { nome: "Doutora Raissa Soares", partido: "PL", numero: "2299", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002532883/BA" }
+    ],
     depEstadual: []
   },
   /* ===== Ceará (CE) ===== */
@@ -394,8 +403,12 @@ const DADOS_ESTADOS = {
       { nome: "Gustavo Gayer", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002543556/GO" },
       { nome: "Oséias Varão", partido: "PL", numero: "227", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002543560/GO" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Adília Roriz", partido: "PL", numero: "2280", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002542612/GO" }
+    ],
+    depEstadual: [
+      { nome: "Felipe Galdino", partido: "PL", numero: "22133", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/90002543768/GO" }
+    ]
   },
   /* ===== Maranhão (MA) ===== */
   ma: {
@@ -460,7 +473,9 @@ const DADOS_ESTADOS = {
       { nome: "Delegado Éder Mauro", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002544855/PA" },
       { nome: "Zequinha Marinho", partido: "Podemos", numero: "200", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002542691/PA" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Allen pelo Pará", partido: "Novo", numero: "3022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002551848/PA" }
+    ],
     depEstadual: []
   },
   /* ===== Paraíba (PB) ===== */
@@ -482,7 +497,8 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Guilherme Livoti", partido: "Novo", numero: "3043", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002542303/PR", entrevista: "https://youtube.com/live/judnrEci8w8" },
-      { nome: "Jeffrey Chiquini", partido: "Novo", numero: "3000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002542287/PR" }
+      { nome: "Jeffrey Chiquini", partido: "Novo", numero: "3000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002542287/PR" },
+      { nome: "Paulo Martins", partido: "Novo", numero: "3020", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002542297/PR" }
     ],
     depEstadual: [
       { nome: "Dr. Cesar Mello", partido: "PL", numero: "22357", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002547630/PR" }
@@ -496,7 +512,8 @@ const DADOS_ESTADOS = {
       { nome: "Carlos Sant'Anna", partido: "Novo", numero: "300", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/170002530097/PE" }
     ],
     depFederal:  [
-      { nome: "Thiago Medina", partido: "PL", numero: "2288", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/170002539162/PE" }
+      { nome: "Thiago Medina", partido: "PL", numero: "2288", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/170002539162/PE" },
+      { nome: "Eduardo Moura", partido: "Novo", numero: "3030", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/170002530336/PE" }
     ],
     depEstadual: []
   },
@@ -630,8 +647,12 @@ const DADOS_ESTADOS = {
       { nome: "Eduardo Gomes", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/270002546333/TO" },
       { nome: "Carlos Gaguim", partido: "União Brasil", numero: "444", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/270002548231/TO" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Mauricio Buffon", partido: "PL", numero: "2288", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/270002544474/TO" }
+    ],
+    depEstadual: [
+      { nome: "Dari Fronza", partido: "PL", numero: "22888", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/270002544483/TO" }
+    ]
   }
 };
 
@@ -692,6 +713,20 @@ MAPA.locations.forEach(loc => {
   p.addEventListener('mouseleave', () => { dica.style.opacity = 0; });
   svg.appendChild(p);
 });
+
+/* Lista de estados abaixo do mapa (em ordem alfabética) */
+(function(){
+  const lista = document.getElementById('lista-estados');
+  Object.entries(NOMES_UF)
+    .sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'))
+    .forEach(([uf, nome]) => {
+      const a = document.createElement('a');
+      a.className = 'pill-estado';
+      a.href = '#/' + uf;
+      a.innerHTML = '<b>' + uf.toUpperCase() + '</b>' + nome;
+      lista.appendChild(a);
+    });
+})();
 
 /* Renderização de um candidato */
 function htmlCandidato(c){
