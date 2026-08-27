@@ -781,7 +781,10 @@ function htmlColinha(uf, dados){
 /* ===== Indicação de candidatos pelos visitantes =====
    O formulário NÃO altera o site: a indicação é enviada por e-mail
    (via formsubmit.co) para o autor avaliar e incluir manualmente. */
-const EMAIL_INDICACOES = 'pturguniev@gmail.com';
+/* Endpoint com o código do FormSubmit (evita expor o e-mail no HTML) */
+const FORMSUBMIT_ID = 'b3a0885a2b1b052f8296eaf69eac5d46';
+/* E-mail montado em partes, usado só no link alternativo de fallback */
+const EMAIL_INDICACOES = ['pturguniev', 'gmail.com'].join('@');
 let indicacaoCargo = '';
 function abrirIndicacao(cargo){
   indicacaoCargo = cargo;
@@ -818,7 +821,7 @@ async function enviarIndicacao(e){
   btn.disabled = true;
   st.textContent = 'Enviando...';
   try{
-    const r = await fetch('https://formsubmit.co/ajax/'+EMAIL_INDICACOES, {
+    const r = await fetch('https://formsubmit.co/ajax/'+FORMSUBMIT_ID, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(dados)
