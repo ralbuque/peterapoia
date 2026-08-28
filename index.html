@@ -138,6 +138,7 @@
   .botao-enviar:disabled{opacity:.6;cursor:wait}
   .modal-status{font-size:.85rem;margin-top:10px;text-align:right}
   .modal-status a{color:var(--azul);font-weight:600}
+  .modal-aviso{background:#fff3cd;border:1px solid #e6d28a;color:#6b5310;border-radius:10px;padding:8px 12px;font-size:.82rem;font-weight:600;margin:8px 0 2px;line-height:1.45}
   .modal-indicacao select{width:100%;padding:8px 10px;border:1px solid var(--borda);border-radius:8px;font:inherit;margin-top:4px;background:#fff;color:var(--texto)}
 
   /* ===== Denúncia de candidato ===== */
@@ -240,13 +241,14 @@
   <div class="modal-indicacao">
     <h4>Indicar um candidato libertário</h4>
     <p id="indicacao-contexto"></p>
+    <div class="modal-aviso" id="indicacao-aviso"></div>
     <form id="form-indicacao" onsubmit="return enviarIndicacao(event)">
       <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label>Nome do candidato *
         <input name="nome" required maxlength="80" placeholder="Nome de urna">
       </label>
       <label>Número na urna *
-        <input name="numero" required maxlength="5" inputmode="numeric" pattern="[0-9]{4,5}" placeholder="Ex.: 3099" title="4 dígitos para federal, 5 para estadual/distrital">
+        <input name="numero" id="indicacao-numero" required inputmode="numeric" placeholder="">
       </label>
       <label>Partido *
         <input name="partido" required maxlength="30" placeholder="Ex.: Novo, PL...">
@@ -275,6 +277,7 @@
   <div class="modal-indicacao">
     <h4>Denunciar candidato não libertário</h4>
     <p id="denuncia-contexto"></p>
+    <div class="modal-aviso">&#9888;&#65039; NÃO ACEITAMOS DENÚNCIAS sobre SENADORES e GOVERNADORES — a lista para esses cargos ESTÁ FECHADA. Este canal serve apenas para deputados federais e estaduais.</div>
     <form id="form-denuncia" onsubmit="return enviarDenuncia(event)">
       <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label>Qual candidato? *
@@ -382,7 +385,9 @@ const DADOS_ESTADOS = {
       { nome: "Sargento Salazar", partido: "PL", numero: "2211", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/40002540480/AM" },
       { nome: "Jean Batista", partido: "PL", numero: "2210", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/40002540478/AM" }
     ],
-    depEstadual: []
+    depEstadual: [
+      { nome: "Kidson Maia", partido: "PL", numero: "22111", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/40002542962/AM" }
+    ]
   },
   /* ===== Bahia (BA) ===== */
   ba: {
@@ -398,7 +403,8 @@ const DADOS_ESTADOS = {
     ],
     depEstadual: [
       { nome: "Rebeca Martins", partido: "PL", numero: "22122", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002535115/BA" },
-      { nome: "Jarbas Lemoss", partido: "PL", numero: "22822", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002535124/BA" }
+      { nome: "Jarbas Lemoss", partido: "PL", numero: "22822", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002535124/BA" },
+      { nome: "Tenóbio", partido: "PL", numero: "22007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002535116/BA" }
     ]
   },
   /* ===== Ceará (CE) ===== */
@@ -427,11 +433,13 @@ const DADOS_ESTADOS = {
       { nome: "Bia Kicis", partido: "PL", numero: "223", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002552934/DF" }
     ],
     depFederal:  [
-      { nome: "Mariana Naime", partido: "PL", numero: "2201", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550931/DF" }
+      { nome: "Mariana Naime", partido: "PL", numero: "2201", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550931/DF" },
+      { nome: "Wilker Sá", partido: "Novo", numero: "3000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002532006/DF" }
     ],
     depEstadual: [
       { nome: "Luíza do Clezão", partido: "PL", numero: "22822", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550006/DF" },
-      { nome: "Julia Lucy", partido: "PL", numero: "22190", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550015/DF" }
+      { nome: "Julia Lucy", partido: "PL", numero: "22190", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550015/DF" },
+      { nome: "Carol Kalil", partido: "PL", numero: "22122", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/70002550017/DF" }
     ]
   },
   /* ===== Espírito Santo (ES) ===== */
@@ -446,7 +454,8 @@ const DADOS_ESTADOS = {
       { nome: "Lucas Polese", partido: "PL", numero: "2212", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002549698/ES" }
     ],
     depEstadual: [
-      { nome: "Elber Fidelis", partido: "Novo", numero: "30762", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002531658/ES" }
+      { nome: "Elber Fidelis", partido: "Novo", numero: "30762", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002531658/ES" },
+      { nome: "Darcio Bracarense", partido: "PL", numero: "22322", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002549410/ES" }
     ]
   },
   /* ===== Goiás (GO) ===== */
@@ -475,9 +484,12 @@ const DADOS_ESTADOS = {
       { nome: "Lahesio Bonfim", partido: "Novo", numero: "300", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002548011/MA" }
     ],
     depFederal:  [
-      { nome: "Flavia Berthier", partido: "PL", numero: "2201", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002537257/MA" }
+      { nome: "Flavia Berthier", partido: "PL", numero: "2201", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002537257/MA" },
+      { nome: "Dr. Yglésio", partido: "PRD", numero: "2501", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002542570/MA" }
     ],
-    depEstadual: []
+    depEstadual: [
+      { nome: "Filipe Arnon", partido: "PL", numero: "22022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/100002537290/MA" }
+    ]
   },
   /* ===== Mato Grosso (MT) ===== */
   mt: {
@@ -493,7 +505,8 @@ const DADOS_ESTADOS = {
     ],
     depEstadual: [
       { nome: "Gilberto Cattani", partido: "PL", numero: "22222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002539234/MT" },
-      { nome: "Otávio Xerife", partido: "PL", numero: "22007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002539006/MT" }
+      { nome: "Otávio Xerife", partido: "PL", numero: "22007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002539006/MT" },
+      { nome: "Abmael Borges", partido: "PL", numero: "22022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002539002/MT" }
     ]
   },
   /* ===== Mato Grosso do Sul (MS) ===== */
@@ -538,7 +551,8 @@ const DADOS_ESTADOS = {
       { nome: "Zequinha Marinho", partido: "Podemos", numero: "200", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002542691/PA" }
     ],
     depFederal:  [
-      { nome: "Allen pelo Pará", partido: "Novo", numero: "3022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002551848/PA" }
+      { nome: "Allen pelo Pará", partido: "Novo", numero: "3022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002551848/PA" },
+      { nome: "Rogerio Barra", partido: "PL", numero: "2255", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002546711/PA" }
     ],
     depEstadual: [
       { nome: "Richard Malheiros", partido: "Novo", numero: "30022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002551341/PA" },
@@ -552,8 +566,12 @@ const DADOS_ESTADOS = {
       { nome: "Dr. Marcelo Queiroga", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002538459/PB" },
       { nome: "Major Fábio", partido: "Novo", numero: "300", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002548968/PB" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Cabo Gilberto Silva", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002538457/PB" }
+    ],
+    depEstadual: [
+      { nome: "Fábio Lopes", partido: "PL", numero: "22000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002541192/PB" }
+    ]
   },
   /* ===== Paraná (PR) ===== */
   pr: {
@@ -614,7 +632,8 @@ const DADOS_ESTADOS = {
     depFederal:  [
       { nome: "Sóstenes Cavalcante", partido: "PL", numero: "2277", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002532795/RJ" },
       { nome: "Rebeca Ramagem", partido: "PL", numero: "2217", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002532796/RJ" },
-      { nome: "Luiz Lima", partido: "Novo", numero: "3030", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002534633/RJ" }
+      { nome: "Luiz Lima", partido: "Novo", numero: "3030", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002534633/RJ" },
+      { nome: "Ed Raposo", partido: "PL", numero: "2207", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002532799/RJ" }
     ],
     depEstadual: [
       { nome: "Alexandre Freitas", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/190002534734/RJ", entrevista: "https://youtube.com/live/PH5078gWm6Q" }
@@ -628,7 +647,8 @@ const DADOS_ESTADOS = {
       { nome: "Coronel Hélio", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002534447/RN" }
     ],
     depFederal:  [
-      { nome: "Raphael Ferreira", partido: "Novo", numero: "3000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002535500/RN" }
+      { nome: "Raphael Ferreira", partido: "Novo", numero: "3000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002535500/RN" },
+      { nome: "General Girão", partido: "PL", numero: "2210", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002533875/RN" }
     ],
     depEstadual: []
   },
@@ -690,7 +710,8 @@ const DADOS_ESTADOS = {
     ],
     depEstadual: [
       { nome: "Matheus Cadorin", partido: "Novo", numero: "30000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002535461/SC" },
-      { nome: "Bruno Souza", partido: "PL", numero: "22722", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539973/SC" }
+      { nome: "Bruno Souza", partido: "PL", numero: "22722", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539973/SC" },
+      { nome: "Delegado Ulisses Gabriel", partido: "PL", numero: "22111", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539990/SC" }
     ]
   },
   /* ===== São Paulo (SP) ===== */
@@ -710,7 +731,8 @@ const DADOS_ESTADOS = {
       { nome: "Eng. Catharina Donato", partido: "Novo", numero: "30777", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530265/SP" },
       { nome: "Paulo Kogos", partido: "PL", numero: "22038", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002536412/SP" },
       { nome: "Eduarda Campopiano", partido: "PL", numero: "22011", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002536384/SP" },
-      { nome: "Carlo Cauti", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530227/SP" }
+      { nome: "Carlo Cauti", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002530227/SP" },
+      { nome: "Leticia Aguiar", partido: "PL", numero: "22522", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/250002536404/SP" }
     ]
   },
   /* ===== Sergipe (SE) ===== */
@@ -721,7 +743,9 @@ const DADOS_ESTADOS = {
       { nome: "Coronel Rocha", partido: "PL", numero: "221", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002551366/SE" }
     ],
     depFederal:  [],
-    depEstadual: []
+    depEstadual: [
+      { nome: "Flávio da Direita Sergipana", partido: "PL", numero: "22100", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002550770/SE" }
+    ]
   },
   /* ===== Tocantins (TO) ===== */
   to: {
@@ -922,6 +946,16 @@ function abrirIndicacao(cargo){
   const estado = NOMES_UF[colinhaUf] || '';
   document.getElementById('indicacao-contexto').textContent =
     cargo + ' — ' + estado + '. A indicação é enviada para o Peter avaliar; ela não entra no site automaticamente.';
+  /* número na urna: 4 dígitos para federal, 5 para estadual/distrital */
+  const digitos = cargo === 'Deputado Federal' ? 4 : 5;
+  const numero = document.getElementById('indicacao-numero');
+  numero.pattern = '[0-9]{' + digitos + '}';
+  numero.maxLength = digitos;
+  numero.placeholder = digitos === 4 ? 'Ex.: 3099' : 'Ex.: 30999';
+  numero.title = 'Número de ' + cargo + ' tem exatamente ' + digitos + ' dígitos';
+  document.getElementById('indicacao-aviso').innerHTML =
+    '&#9888;&#65039; Este formulário é para <strong>' + cargo + '</strong>: o número tem <strong>' +
+    digitos + ' dígitos</strong>. Candidatos indicados para cargo distinto serão ignorados.';
   document.getElementById('modal-status').textContent = '';
   document.getElementById('fundo-modal').style.display = 'flex';
 }
@@ -937,6 +971,13 @@ async function enviarIndicacao(e){
   e.preventDefault();
   const f = e.target;
   const st = document.getElementById('modal-status');
+  /* número precisa ter o tamanho exato do cargo */
+  const digitosEsperados = indicacaoCargo === 'Deputado Federal' ? 4 : 5;
+  if(!/^[0-9]+$/.test(f.numero.value) || f.numero.value.length !== digitosEsperados){
+    st.textContent = 'Número de ' + indicacaoCargo + ' tem exatamente ' + digitosEsperados +
+      ' dígitos. Confira se o candidato concorre mesmo a este cargo.';
+    return false;
+  }
   /* validação extra: 200 caracteres reais, descontando espaços nas pontas */
   if(f.mensagem.value.trim().length < 200){
     st.textContent = 'A justificativa precisa ter pelo menos 200 caracteres.';
