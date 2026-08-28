@@ -317,8 +317,12 @@ const DADOS_ESTADOS = {
       { nome: "Marina JHC", partido: "PSDB", numero: "456", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002553711/AL" },
       { nome: "Arthur Lira", partido: "PP", numero: "111", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002553272/AL" }
     ],
-    depFederal:  [],
-    depEstadual: []
+    depFederal:  [
+      { nome: "Nivaldo Albuquerque", partido: "União Brasil", numero: "4400", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002547846/AL" }
+    ],
+    depEstadual: [
+      { nome: "Leonardo Dias", partido: "PL", numero: "22123", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/20002550946/AL" }
+    ]
   },
   /* ===== Amapá (AP) ===== */
   ap: {
@@ -337,7 +341,9 @@ const DADOS_ESTADOS = {
       { nome: "Capitão Alberto Neto", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/40002542686/AM" },
       { nome: "Plinio Valério", partido: "PSDB", numero: "455", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/40002537344/AM" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Sargento Salazar", partido: "PL", numero: "2211", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/40002540480/AM" }
+    ],
     depEstadual: []
   },
   /* ===== Bahia (BA) ===== */
@@ -349,7 +355,8 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Leandro de Jesus", partido: "PL", numero: "2233", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002532902/BA" },
-      { nome: "Doutora Raissa Soares", partido: "PL", numero: "2299", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002532883/BA" }
+      { nome: "Doutora Raissa Soares", partido: "PL", numero: "2299", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002532883/BA" },
+      { nome: "Giu Argolo", partido: "PL", numero: "2226", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/50002532912/BA" }
     ],
     depEstadual: []
   },
@@ -361,10 +368,12 @@ const DADOS_ESTADOS = {
       { nome: "Capitão Wagner", partido: "União Brasil", numero: "445", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002540753/CE" }
     ],
     depFederal:  [
-      { nome: "André Fernandes", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002536979/CE" }
+      { nome: "André Fernandes", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002536979/CE" },
+      { nome: "Priscila Costa", partido: "PL", numero: "2288", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002536974/CE" }
     ],
     depEstadual: [
-      { nome: "Jeovane Barros", partido: "Novo", numero: "30000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002540353/CE" }
+      { nome: "Jeovane Barros", partido: "Novo", numero: "30000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002540353/CE" },
+      { nome: "Bella Carmelo", partido: "PL", numero: "22022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/60002542851/CE" }
     ]
   },
   /* ===== Distrito Federal (DF) ===== */
@@ -430,7 +439,8 @@ const DADOS_ESTADOS = {
       { nome: "Janaina Riva", partido: "MDB", numero: "150", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002552698/MT" }
     ],
     depFederal:  [
-      { nome: "Thiago Boava Hey Roy", partido: "PL", numero: "2202", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002538413/MT" }
+      { nome: "Thiago Boava Hey Roy", partido: "PL", numero: "2202", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002538413/MT" },
+      { nome: "Coronel Assis", partido: "PL", numero: "2244", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002538410/MT" }
     ],
     depEstadual: [
       { nome: "Gilberto Cattani", partido: "PL", numero: "22222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/110002539234/MT" }
@@ -465,7 +475,9 @@ const DADOS_ESTADOS = {
     depEstadual: [
       { nome: "Rian Pereira", partido: "Novo", numero: "30000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534562/MG", entrevista: "https://youtube.com/live/vrfEYHepkBQ" },
       { nome: "Bruno Engler", partido: "PL", numero: "22222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002542113/MG" },
-      { nome: "Fernanda Pereira Altoé", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534574/MG" }
+      { nome: "Fernanda Pereira Altoé", partido: "Novo", numero: "30007", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534574/MG" },
+      { nome: "Brisa Almeida", partido: "Novo", numero: "30035", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002534503/MG", entrevista: "https://youtube.com/live/dijesny3jAY" },
+      { nome: "Saori Volkov", partido: "Novo", numero: "30004", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/130002554145/MG", entrevista: "https://youtube.com/live/dijesny3jAY" }
     ]
   },
   /* ===== Pará (PA) ===== */
@@ -505,7 +517,7 @@ const DADOS_ESTADOS = {
       { nome: "Paulo Martins", partido: "Novo", numero: "3020", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002542297/PR" }
     ],
     depEstadual: [
-      { nome: "Dr. Cesar Mello", partido: "PL", numero: "22357", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002547630/PR" }
+      { nome: "Dr. Cesar Mello", partido: "PL", numero: "22357", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/160002547630/PR", entrevista: "https://youtube.com/live/dijesny3jAY" }
     ]
   },
   /* ===== Pernambuco (PE) ===== */
@@ -560,7 +572,9 @@ const DADOS_ESTADOS = {
       { nome: "Styvenson Valentim", partido: "Podemos", numero: "200", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002534448/RN" },
       { nome: "Coronel Hélio", partido: "PL", numero: "222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002534447/RN" }
     ],
-    depFederal:  [],
+    depFederal:  [
+      { nome: "Raphael Ferreira", partido: "Novo", numero: "3000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/200002535500/RN" }
+    ],
     depEstadual: []
   },
   /* ===== Rio Grande do Sul (RS) ===== */
@@ -616,7 +630,8 @@ const DADOS_ESTADOS = {
       { nome: "Julia Zanatta", partido: "PL", numero: "2233", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539378/SC" }
     ],
     depEstadual: [
-      { nome: "Matheus Cadorin", partido: "Novo", numero: "30000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002535461/SC" }
+      { nome: "Matheus Cadorin", partido: "Novo", numero: "30000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002535461/SC" },
+      { nome: "Bruno Souza", partido: "PL", numero: "22722", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/240002539973/SC" }
     ]
   },
   /* ===== São Paulo (SP) ===== */
@@ -751,6 +766,12 @@ function htmlCandidato(c){
     '</div>';
 }
 
+/* Quem tem entrevista aparece na frente da lista (a ordem entre eles é mantida) */
+function ordenarPorEntrevista(lista){
+  if(!Array.isArray(lista)) return lista;
+  return lista.filter(c => c.entrevista).concat(lista.filter(c => !c.entrevista));
+}
+
 function htmlCargo(titulo, candidatos, destaque, indicacao){
   let corpo;
   if(!candidatos || (Array.isArray(candidatos) && candidatos.length===0)){
@@ -784,7 +805,7 @@ function colinhaConteudo(rotulo, cand, qtd, botao){
    (só nesta visualização — nada fica gravado; a impressão sai com o escolhido). */
 function colinhaCargoCiclavel(tipo){
   const dados = DADOS_ESTADOS[colinhaUf] || {};
-  const lista = (tipo === 'fed' ? dados.depFederal : dados.depEstadual) || [];
+  const lista = ordenarPorEntrevista((tipo === 'fed' ? dados.depFederal : dados.depEstadual) || []);
   const rotulo = tipo === 'fed'
     ? 'Deputada ou Deputado Federal'
     : (colinhaUf === 'df' ? 'Deputada ou Deputado Distrital' : 'Deputada ou Deputado Estadual');
@@ -795,7 +816,7 @@ function colinhaCargoCiclavel(tipo){
 }
 function colinhaCiclar(tipo){
   const dados = DADOS_ESTADOS[colinhaUf] || {};
-  const lista = (tipo === 'fed' ? dados.depFederal : dados.depEstadual) || [];
+  const lista = ordenarPorEntrevista((tipo === 'fed' ? dados.depFederal : dados.depEstadual) || []);
   if(lista.length < 2) return;
   colinhaIdx[tipo] = (colinhaIdx[tipo] + 1) % lista.length;
   document.getElementById('colinha-cargo-' + tipo).innerHTML = colinhaCargoCiclavel(tipo);
@@ -902,10 +923,11 @@ function mostrarEstado(uf){
   document.getElementById('grade-cargos').innerHTML =
     htmlCargo('Governador', dados.governador, true) +
     htmlCargo('Senador', dados.senador) +
-    htmlCargo('Deputado Federal', dados.depFederal, false,
+    htmlCargo('Deputado Federal', ordenarPorEntrevista(dados.depFederal), false,
               /* o botão de indicar some quando já há 3 ou mais indicações */
               (dados.depFederal || []).length < 3 ? 'Deputado Federal' : null) +
-    htmlCargo(uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual', dados.depEstadual, false,
+    htmlCargo(uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual',
+              ordenarPorEntrevista(dados.depEstadual), false,
               (dados.depEstadual || []).length < 3
                 ? (uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual') : null) +
     htmlColinha(uf, dados);
