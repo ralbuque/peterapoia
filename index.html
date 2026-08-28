@@ -138,6 +138,12 @@
   .botao-enviar:disabled{opacity:.6;cursor:wait}
   .modal-status{font-size:.85rem;margin-top:10px;text-align:right}
   .modal-status a{color:var(--azul);font-weight:600}
+  .modal-indicacao select{width:100%;padding:8px 10px;border:1px solid var(--borda);border-radius:8px;font:inherit;margin-top:4px;background:#fff;color:var(--texto)}
+
+  /* ===== Denúncia de candidato ===== */
+  .rodape-denuncia{grid-column:1 / -1;text-align:center;margin-top:6px}
+  .botao-denunciar{background:none;border:none;color:var(--texto-suave);text-decoration:underline;font-size:.85rem;cursor:pointer;padding:6px}
+  .botao-denunciar:hover{color:#b00020}
   @media print{
     body *{visibility:hidden}
     .cartao-colinha,.cartao-colinha *{visibility:visible}
@@ -260,6 +266,35 @@
         <button type="submit" class="botao-enviar" id="botao-enviar">Enviar indicação</button>
       </div>
       <p class="modal-status" id="modal-status"></p>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: denúncia de candidato não libertário -->
+<div class="fundo-modal" id="fundo-denuncia" onclick="if(event.target===this)fecharDenuncia()">
+  <div class="modal-indicacao">
+    <h4>Denunciar candidato não libertário</h4>
+    <p id="denuncia-contexto"></p>
+    <form id="form-denuncia" onsubmit="return enviarDenuncia(event)">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label>Qual candidato? *
+        <select name="candidato" id="denuncia-candidato" required></select>
+      </label>
+      <label>Seu e-mail *
+        <input name="email" type="email" required maxlength="100" placeholder="voce@exemplo.com">
+        <small>Informe um e-mail válido: é por ele que eu entro em contato sobre a sua denúncia.</small>
+      </label>
+      <label>Explique os motivos *
+        <textarea name="motivo" rows="6" required minlength="300" maxlength="2000"
+          placeholder="Explique com detalhes por que este candidato não deveria estar na lista..."
+          oninput="document.getElementById('contador-denuncia').textContent=this.value.length+'/300 caracteres (mínimo)'"></textarea>
+        <small>Aponte fatos concretos: votos, declarações ou posições do candidato que contrariem as pautas libertárias. <strong>Mínimo de 300 caracteres.</strong> <span id="contador-denuncia">0/300 caracteres (mínimo)</span></small>
+      </label>
+      <div class="modal-botoes">
+        <button type="button" class="botao-cancelar" onclick="fecharDenuncia()">Cancelar</button>
+        <button type="submit" class="botao-enviar" id="botao-enviar-denuncia">Enviar denúncia</button>
+      </div>
+      <p class="modal-status" id="denuncia-status"></p>
     </form>
   </div>
 </div>
@@ -915,6 +950,72 @@ async function enviarIndicacao(e){
   return false;
 }
 
+/* ===== Denúncia de candidato não libertário =====
+   Como a indicação, vai por e-mail para o autor avaliar — nada muda no site. */
+function abrirDenuncia(){
+  const dados = DADOS_ESTADOS[colinhaUf] || {};
+  const estado = NOMES_UF[colinhaUf] || '';
+  const sel = document.getElementById('denuncia-candidato');
+  sel.innerHTML = '<option value="" disabled selected>Escolha o candidato</option>';
+  const rotEst = colinhaUf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual';
+  [['Deputado Federal', dados.depFederal || []], [rotEst, dados.depEstadual || []]].forEach(([cargo, lista]) => {
+    lista.forEach(c => {
+      const o = document.createElement('option');
+      o.value = cargo + ' | ' + c.nome + ' | ' + (c.numero || 's/nº');
+      o.textContent = cargo + ' — ' + c.nome + ' (' + (c.numero || 'sem número') + ')';
+      sel.appendChild(o);
+    });
+  });
+  document.getElementById('denuncia-contexto').textContent =
+    estado + '. A denúncia é enviada para o Peter avaliar com calma; nada é alterado no site automaticamente.';
+  document.getElementById('denuncia-status').textContent = '';
+  document.getElementById('fundo-denuncia').style.display = 'flex';
+}
+function fecharDenuncia(){
+  document.getElementById('fundo-denuncia').style.display = 'none';
+}
+function mailtoDenuncia(d){
+  const corpo = 'Estado: '+d.estado+'\nCandidato: '+d.candidato+'\nE-mail: '+d.email+'\nMotivos: '+d.motivo;
+  return 'mailto:'+EMAIL_INDICACOES+'?subject='+encodeURIComponent(d._subject)+'&body='+encodeURIComponent(corpo);
+}
+async function enviarDenuncia(e){
+  e.preventDefault();
+  const f = e.target;
+  const st = document.getElementById('denuncia-status');
+  if(f.motivo.value.trim().length < 300){
+    st.textContent = 'A explicação precisa ter pelo menos 300 caracteres.';
+    return false;
+  }
+  const estado = NOMES_UF[colinhaUf] || '';
+  const dados = {
+    _subject: '[Peter Apoia] DENÚNCIA: '+f.candidato.value.split(' | ')[1]+' — '+estado,
+    _honey: f._honey.value,
+    estado: estado,
+    candidato: f.candidato.value,
+    email: f.email.value,
+    motivo: f.motivo.value
+  };
+  const btn = document.getElementById('botao-enviar-denuncia');
+  btn.disabled = true;
+  st.textContent = 'Enviando...';
+  try{
+    const r = await fetch('https://formsubmit.co/ajax/'+FORMSUBMIT_ID, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+    if(!r.ok) throw new Error('http '+r.status);
+    st.textContent = '✅ Denúncia enviada. Obrigado!';
+    f.reset();
+    setTimeout(fecharDenuncia, 2500);
+  }catch(err){
+    st.innerHTML = 'Não foi possível enviar automaticamente. '+
+      '<a href="'+mailtoDenuncia(dados)+'">Clique aqui para enviar por e-mail</a>.';
+  }
+  btn.disabled = false;
+  return false;
+}
+
 /* Mostra a página de um estado */
 function mostrarEstado(uf){
   const dados = DADOS_ESTADOS[uf] || {};
@@ -930,7 +1031,11 @@ function mostrarEstado(uf){
               ordenarPorEntrevista(dados.depEstadual), false,
               (dados.depEstadual || []).length < 3
                 ? (uf === 'df' ? 'Deputado Distrital' : 'Deputado Estadual') : null) +
-    htmlColinha(uf, dados);
+    htmlColinha(uf, dados) +
+    /* denúncia: aparece só quando o estado tem algum deputado indicado */
+    (((dados.depFederal || []).length + (dados.depEstadual || []).length) > 0
+      ? '<div class="rodape-denuncia"><button class="botao-denunciar" onclick="abrirDenuncia()">Quero denunciar candidato não libertário</button></div>'
+      : '');
   document.getElementById('pagina-principal').style.display = 'none';
   document.getElementById('pagina-estado').style.display = 'block';
   window.scrollTo({top:0});
