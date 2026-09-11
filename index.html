@@ -31,6 +31,8 @@
   };
 </script>
 <script data-goatcounter="https://peterapoia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<!-- html2canvas: gera a imagem da colinha para compartilhamento -->
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root{
     --verde:#00923F;
@@ -103,9 +105,14 @@
 
   /* ===== Colinha ===== */
   .cartao-colinha{grid-column:1 / -1;background:var(--card);border:1px solid var(--borda);border-radius:14px;box-shadow:0 2px 10px rgba(0,20,60,.06);overflow:hidden;margin-top:6px}
-  .colinha-topo{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:#fff;text-align:center;padding:18px 16px 14px}
+  .colinha-topo{background:linear-gradient(135deg,var(--azul-escuro) 0%,var(--azul) 60%,#01389e 100%);color:#fff;padding:14px 18px 10px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+  .colinha-topo img{height:82px;width:auto;flex:0 0 auto}
+  .colinha-topo .colinha-titulos{text-align:left}
   .colinha-topo h4{color:var(--amarelo);font-size:1.35rem;letter-spacing:.6px;text-transform:uppercase;margin:0}
   .colinha-topo p{color:#cdd8f0;font-size:.92rem;margin-top:4px}
+  .colinha-site{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:#fff;text-align:center;padding:10px 16px 12px}
+  .colinha-site .dominio{color:var(--amarelo);font-weight:800;font-size:1.1rem;letter-spacing:.8px}
+  .colinha-site .sub{display:block;color:#cdd8f0;font-size:.78rem;margin-top:2px}
   .colinha-faixa{height:5px;background:linear-gradient(90deg,var(--verde) 0 33%,var(--amarelo) 33% 66%,var(--azul) 66% 100%)}
   .colinha-corpo{padding:20px 18px 8px;display:flex;flex-direction:column;gap:16px;align-items:center}
   .colinha-cargo{text-align:center}
@@ -118,6 +125,10 @@
   .colinha-aviso{max-width:560px;margin:4px auto 0;background:#fff3cd;border:1px solid #e6d28a;color:#6b5310;border-radius:10px;padding:10px 14px;font-size:.88rem;font-weight:600}
   .botao-imprimir{display:inline-flex;align-items:center;gap:8px;background:var(--verde);color:#fff;border:none;font-size:.95rem;font-weight:700;padding:10px 22px;border-radius:999px;cursor:pointer;margin-top:12px}
   .botao-imprimir:hover{filter:brightness(1.08)}
+  .colinha-botoes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .botao-compartilhar{display:inline-flex;align-items:center;gap:8px;background:var(--azul);color:#fff;border:none;font-size:.95rem;font-weight:700;padding:10px 22px;border-radius:999px;cursor:pointer}
+  .botao-compartilhar:hover{filter:brightness(1.15)}
+  .botao-compartilhar:disabled{opacity:.6;cursor:wait}
   .botao-ciclar{align-self:center;margin-left:10px;background:#fff;border:2px solid var(--azul);color:var(--azul);font-weight:700;font-size:.8rem;padding:5px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
   .botao-ciclar:hover{background:var(--azul);color:var(--amarelo)}
 
@@ -149,7 +160,7 @@
     body *{visibility:hidden}
     .cartao-colinha,.cartao-colinha *{visibility:visible}
     .cartao-colinha{position:absolute;top:0;left:0;right:0;box-shadow:none;border:none}
-    .botao-imprimir,.botao-ciclar{display:none}
+    .colinha-rodape,.botao-imprimir,.botao-compartilhar,.botao-ciclar{display:none}
   }
   .cartao-cargo{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:20px;box-shadow:0 2px 10px rgba(0,20,60,.06)}
   .cartao-cargo h4{color:#fff;background:var(--verde);display:inline-block;font-size:.82rem;text-transform:uppercase;letter-spacing:.8px;padding:4px 12px;border-radius:999px;margin-bottom:14px}
@@ -464,7 +475,8 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Gilvan o Federal da Direita", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002549700/ES" },
-      { nome: "Lucas Polese", partido: "PL", numero: "2212", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002549698/ES" }
+      { nome: "Lucas Polese", partido: "PL", numero: "2212", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002549698/ES" },
+      { nome: "Lazaro", partido: "PL", numero: "2233", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002549703/ES" }
     ],
     depEstadual: [
       { nome: "Elber Fidelis", partido: "Novo", numero: "30762", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/80002531658/ES" },
@@ -571,7 +583,8 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Allen pelo Pará", partido: "Novo", numero: "3022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002551848/PA" },
-      { nome: "Rogerio Barra", partido: "PL", numero: "2255", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002546711/PA" }
+      { nome: "Rogerio Barra", partido: "PL", numero: "2255", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002546711/PA" },
+      { nome: "Joaquim Passarinho", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002546710/PA" }
     ],
     depEstadual: [
       { nome: "Richard Malheiros", partido: "Novo", numero: "30022", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/140002551341/PA" },
@@ -588,7 +601,8 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Cabo Gilberto Silva", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002538457/PB" },
-      { nome: "Krisna Gopal", partido: "DC", numero: "2767", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002553619/PB" }
+      { nome: "Krisna Gopal", partido: "DC", numero: "2767", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002553619/PB" },
+      { nome: "Cantora Munique Marinho", partido: "PL", numero: "2223", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002538455/PB" }
     ],
     depEstadual: [
       { nome: "Fábio Lopes", partido: "PL", numero: "22000", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/150002541192/PB" },
@@ -719,7 +733,8 @@ const DADOS_ESTADOS = {
     ],
     depEstadual: [
       { nome: "Jean Mendonça", partido: "PL", numero: "22222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002537554/RO" },
-      { nome: "Patrick Faelbi", partido: "PL", numero: "22200", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002537551/RO" }
+      { nome: "Patrick Faelbi", partido: "PL", numero: "22200", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002537551/RO" },
+      { nome: "Dra. Taíssa Sousa", partido: "PL", numero: "22220", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/220002537560/RO" }
     ]
   },
   /* ===== Roraima (RR) ===== */
@@ -787,11 +802,13 @@ const DADOS_ESTADOS = {
     ],
     depFederal:  [
       { nome: "Moana Valadares", partido: "PL", numero: "2222", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002549712/SE" },
-      { nome: "Mendonça Prado", partido: "PL", numero: "2210", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002549709/SE" }
+      { nome: "Mendonça Prado", partido: "PL", numero: "2210", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002549709/SE" },
+      { nome: "Sargento Vieira", partido: "PL", numero: "2233", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002549710/SE" }
     ],
     depEstadual: [
       { nome: "Flávio da Direita Sergipana", partido: "PL", numero: "22100", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002550770/SE" },
-      { nome: "Bolsonaro Sergipano", partido: "PL", numero: "22322", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002550752/SE" }
+      { nome: "Bolsonaro Sergipano", partido: "PL", numero: "22322", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002550752/SE" },
+      { nome: "GG Leandro", partido: "PL", numero: "22345", foto: "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/20322002026/260002554130/SE" }
     ]
   },
   /* ===== Tocantins (TO) ===== */
@@ -960,8 +977,12 @@ function htmlColinha(uf, dados){
     '<div class="colinha-cargo">'+colinhaConteudo(rotulo, cand, qtd)+'</div>';
   const sen = dados.senador || [];
   return '<div class="cartao-colinha">'+
-    '<div class="colinha-topo"><h4>No dia 04/10, leve a cola!</h4>'+
-    '<p>Meus números neste estado, na ordem dos votos na urna</p></div>'+
+    '<div id="colinha-capturavel">'+
+    '<div class="colinha-topo">'+
+    '<img src="peter.png" alt="Peter Turguniev">'+
+    '<div class="colinha-titulos"><h4>No dia 04/10, leve a cola!</h4>'+
+    '<p>Meus números — '+(NOMES_UF[uf] || '')+',<br>na ordem dos votos na urna</p></div>'+
+    '</div>'+
     '<div class="colinha-faixa"></div>'+
     '<div class="colinha-corpo">'+
     '<div class="colinha-cargo" id="colinha-cargo-fed">'+colinhaCargoCiclavel('fed')+'</div>'+
@@ -971,9 +992,16 @@ function htmlColinha(uf, dados){
     linha('Governadora ou Governador', dados.governador, 2)+
     linha('Presidente da República', { nome: 'Flávio Bolsonaro', numero: '22' }, 2)+
     '</div>'+
+    '<div class="colinha-faixa"></div>'+
+    '<div class="colinha-site"><span class="dominio">peterapoia.com</span>'+
+    '<span class="sub">Indicações de voto de Peter Turguniev — Eleições 2026</span></div>'+
+    '</div>'+
     '<div class="colinha-rodape">'+
     '<div class="colinha-aviso">&#9888;&#65039; Não é permitido usar o celular na cabine de votação: imprima esta colinha e leve o papel com você.</div>'+
+    '<div class="colinha-botoes">'+
     '<button class="botao-imprimir" onclick="window.print()">&#128424; Imprimir a colinha</button>'+
+    '<button class="botao-compartilhar" id="botao-compartilhar" onclick="compartilharColinha()">&#128228; Compartilhar a colinha</button>'+
+    '</div>'+
     '<p style="margin-top:10px">Levar a colinha impressa é permitido e '+
     '<a href="https://www.tre-sp.jus.br/comunicacao/noticias/2026/Agosto/eleicoes-2026-confira-a-ordem-dos-6-votos-na-urna-e-como-usar-a-colinha-eleitoral" target="_blank" rel="noopener">recomendado pela Justiça Eleitoral</a>.</p>'+
     '</div>'+
@@ -1127,6 +1155,61 @@ async function enviarDenuncia(e){
   }
   btn.disabled = false;
   return false;
+}
+
+/* ===== Compartilhar a colinha =====
+   Gera uma imagem da colinha (como está na tela, com os candidatos escolhidos
+   no ⟳) e abre a tela nativa de compartilhamento do celular; onde não houver
+   suporte, baixa a imagem para a pessoa compartilhar manualmente. */
+async function compartilharColinha(){
+  const btn = document.getElementById('botao-compartilhar');
+  const alvo = document.getElementById('colinha-capturavel');
+  if(!alvo) return;
+  if(typeof html2canvas !== 'function'){
+    btn.textContent = 'Recurso indisponível — tente recarregar a página';
+    setTimeout(() => { btn.innerHTML = '&#128228; Compartilhar a colinha'; }, 3500);
+    return;
+  }
+  const rotuloOriginal = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = 'Gerando imagem...';
+  try{
+    const canvas = await html2canvas(alvo, {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      ignoreElements: el => el.classList && el.classList.contains('botao-ciclar')
+    });
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    const estado = (NOMES_UF[colinhaUf] || 'brasil').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '-');
+    const arquivo = new File([blob], 'colinha-' + estado + '-peterapoia.png', { type: 'image/png' });
+    if(navigator.canShare && navigator.canShare({ files: [arquivo] })){
+      await navigator.share({
+        files: [arquivo],
+        title: 'Minha colinha — Peter Apoia',
+        text: 'Minha colinha para as eleições 2026. Monte a sua em peterapoia.com'
+      });
+    } else {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = arquivo.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    }
+  }catch(err){
+    /* AbortError = pessoa fechou a tela de compartilhar; não é erro */
+    if(!err || err.name !== 'AbortError'){
+      btn.disabled = false;
+      btn.textContent = 'Não deu certo — tente de novo';
+      setTimeout(() => { btn.innerHTML = rotuloOriginal; }, 3000);
+      return;
+    }
+  }
+  btn.disabled = false;
+  btn.innerHTML = rotuloOriginal;
 }
 
 /* Mostra a página de um estado */
